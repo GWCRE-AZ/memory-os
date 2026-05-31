@@ -132,6 +132,6 @@ If you're like me — tired of amnesiac agents — Memory OS was built for you.
 **Want to see the agent remember for real?**  
 Clone it, run it, feel the difference.
 
-→ [Setup guide](setup/install.md) · [Layer deep-dives](layers/) · [Infrastructure docs](infrastructure/architecture.md) · [License](LICENSE)
+→ [Setup guide](setup/install.md) · [Layer deep-dives](layers/) · [Infrastructure docs](infrastructure/architecture.md) · [Operational skills](skills/) · [License](LICENSE)
 
 MIT License · Built with obsession by someone who runs Hermes every single day.
