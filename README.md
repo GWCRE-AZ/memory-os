@@ -1,5 +1,7 @@
 # Memory OS — Hermes Agent Memory Operating System
 
+![Memory OS Banner](assets/banner.jpg)
+
 > **Your agent finally stops forgetting.**  
 > Permanent memory. Local memory infrastructure. API-provider agnostic. Surgically token-efficient.
 
