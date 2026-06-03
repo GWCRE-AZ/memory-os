@@ -12,7 +12,8 @@ logger = logging.getLogger("cognitive-worker.qdrant")
 
 QDRANT_HOST = os.environ.get("QDRANT_HOST", "qdrant-maas")
 QDRANT_PORT = int(os.environ.get("QDRANT_PORT", "6333"))
-QDRANT_API_KEY=os.env...DIMS = int(os.environ.get("EMBEDDING_DIMS", "4096"))
+QDRANT_API_KEY = os.environ.get("QDRANT_API_KEY", "")
+EMBEDDING_DIMS = int(os.environ.get("EMBEDDING_DIMS", "4096"))
 COLLECTION_NAME = os.environ.get("COLLECTION_NAME", "knowledge_base")
 
 _client: AsyncQdrantClient | None = None
