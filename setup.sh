@@ -189,7 +189,11 @@ banner "Phase 6: Wiki & Vault"
 
 mkdir -p "${VAULT_PATH}/wiki/"{raw,concepts,entities,comparisons,_meta,_archive}
 mkdir -p "${VAULT_PATH}/fabric"
+# Ensure Docker worker can read wiki files (umask may create 600)
+chmod -R 755 "${VAULT_PATH}/wiki"
+chmod -R 755 "${VAULT_PATH}/fabric"
 ok "Directory structure created at ${VAULT_PATH}"
+info "Permissions set to 755 on wiki/ and fabric/ (ensures Docker worker read access)"
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Phase 7: Docker Stack
@@ -205,22 +209,18 @@ fi
 
 cd "${DOCKER_DIR}"
 
-# Detect OpenRouter API key from Hermes .env
+# Detect API key from Hermes .env
 OPENROUTER_KEY=""
 if [ -f "${ENV_FILE}" ]; then
-    # Try OPENROUTER_DS_API_KEY first (Hermes default), then OPENROUTER_API_KEY
-    OPENROUTER_KEY=$(grep -oP 'OPENROUTER_DS_API_KEY=\K.*' "${ENV_FILE}" 2>/dev/null | head -1 || true)
-    if [ -z "${OPENROUTER_KEY}" ]; then
-        OPENROUTER_KEY=$(grep -oP 'OPENROUTER_API_KEY=\K.*' "${ENV_FILE}" 2>/dev/null | head -1 || true)
-    fi
+    OPENROUTER_KEY=$(grep -oP 'OPENROUTER_API_KEY=\K.*' "${ENV_FILE}" 2>/dev/null | head -1 || true)
 fi
 
 if [ -z "${OPENROUTER_KEY}" ]; then
     echo ""
-    echo -e "  ${YELLOW}Could not find your OpenRouter key in Hermes .env.${NC}"
-    echo "  The worker needs it to generate embeddings."
+    echo -e "  ${YELLOW}Could not find an API key in Hermes .env.${NC}"
+    echo "  The worker needs an embedding-capable API key (OpenRouter or compatible)."
     echo ""
-    read -r -p "  Paste your OpenRouter key (e.g. sk-or-v1-...): " OPENROUTER_KEY
+    read -r -p "  Paste your API key (e.g. sk-or-v1-...): " OPENROUTER_KEY
     echo ""
 fi
 
@@ -304,7 +304,7 @@ add_env "ICARUS_EXTRACTION_MODEL" "deepseek/deepseek-v4-flash"
 add_env "EMBEDDING_DIMS" "4096"
 add_env "HERMES_AGENT_NAME" "hermes"
 add_env "REDIS_PASSWORD" "${REDIS_PW}"
-add_env "OPENROUTER_DS_API_KEY" "${OPENROUTER_KEY}"
+add_env "OPENROUTER_API_KEY" "${OPENROUTER_KEY}"
 
 ok "Environment variables added to Hermes .env"
 
