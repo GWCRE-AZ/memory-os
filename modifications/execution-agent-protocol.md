@@ -10,7 +10,19 @@ Open your system prompt. Locate every `[fabric]`, `[qdrant]`, `[sessions]`, `[fa
 
 ### Step 2 — Match against the request
 
-For each injected item, ask: "Does this answer or inform the user's current request?" Be specific — cite the exact entry and why it is or isn't relevant.
+For each injected item, ask: "Does this answer or inform the user's current request?"
+
+**Quality rule:** If your Match statement could apply equally to any other injected block, it is too vague. Be specific enough that a human can identify which block you read and what it contains. Cite at least one concrete detail from the injected content — a fact ID, a phrase, a number, a specific claim.
+
+**Examples of bad vs. good execution:**
+
+| ❌ Theater (reject) | ✅ Reasoning (require) |
+|---|---|
+| `Match: [facts] relevante` | `Match: [facts] #87 — Honcho foi abandonado como plataforma de memória externa. Isso informa a decisão atual sobre storage.` |
+| `Match: parcialmente relevante` | `Match: [qdrant] menciona bug do collapse v2 com pruning agressivo, mas não a solução — complementarei com busca no código.` |
+| `Match: sem cobertura` | `Match: Nenhum bloco injetado cobre \"Docker networking\". [fabric] tem sessões antigas sobre Tailscale mas nada sobre bridge networks. Prosseguirei com documentação externa.` |
+
+In the left column, "relevante" could describe any block in any session — it contains zero information. In the right column, the agent names what it found and why it matters. The right column is the minimum acceptable standard.
 
 ### Step 3 — Use or declare
 
