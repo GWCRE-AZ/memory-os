@@ -1,7 +1,7 @@
 """
 Tasks — File-based wiki ingestion (Phase B: continuous).
 Receives a file path to a .md file inside the container (e.g. /wiki/concepts/new.md),
-extracts frontmatter, generates DENSE + BM25 SPARSE embeddings, upserts into knowledge_base_hybrid.
+extracts frontmatter, generates DENSE + BM25 SPARSE embeddings, upserts into the configured collection.
 """
 import logging
 import os
@@ -152,7 +152,7 @@ async def ingest_file(
     file_path: str,
 ) -> dict:
     """
-    Ingests a .md file from the vault into knowledge_base_hybrid (dense + BM25 sparse).
+    Ingests a .md file from the vault (dense + BM25 sparse).
     Returns a dict with id and status.
     """
     wiki_root = Path(WIKI_PATH).resolve()
