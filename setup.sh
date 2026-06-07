@@ -242,6 +242,12 @@ DOCKERENV
 
 ok "docker/.env created"
 
+# Patch docker-compose.yml: remove Qdrant API key line when empty (v1.17+ enables auth on empty key)
+if [ -z "${QDRANT_API_KEY}" ]; then
+    info "Qdrant API key not set — disabling Qdrant authentication"
+    sed -i '/^.*QDRANT__SERVICE__API_KEY:/s/.*/      # QDRANT__SERVICE__API_KEY: disabled (no key set)/' docker-compose.yml
+fi
+
 # Pull pre-built images first (Redis, Qdrant) — fast
 info "Downloading pre-built images (Redis, Qdrant)..."
 docker compose pull redis qdrant 2>&1 | tail -3
