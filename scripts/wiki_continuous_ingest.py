@@ -27,6 +27,13 @@ STATE_FILE = Path.home() / ".hermes" / "wiki_ingest_state.json"
 FAILURES_FILE = Path.home() / ".hermes" / "wiki_ingest_failures.json"
 REDIS_PASSWORD = os.environ.get("REDIS_PASSWORD", "")
 
+# Fallback: read REDIS_PASSWORD from Docker .env if not in environment (cron context)
+if not REDIS_PASSWORD:
+    DOCKER_ENV = Path.home() / "memory-os" / "docker" / ".env"
+    if DOCKER_ENV.exists():
+        load_dotenv(DOCKER_ENV)
+        REDIS_PASSWORD = os.environ.get("REDIS_PASSWORD", "")
+
 redis_settings = RedisSettings(
     host="127.0.0.1",
     port=6379,

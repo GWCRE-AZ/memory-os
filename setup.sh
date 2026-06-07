@@ -279,6 +279,21 @@ fi
 cd "${REPO_DIR}"
 
 # ──────────────────────────────────────────────────────────────────────────────
+# Phase 7b: Wiki Watcher Cron
+# ──────────────────────────────────────────────────────────────────────────────
+banner "Phase 7b: Wiki Watcher"
+
+CRON_ENTRY="0 * * * * cd ${REPO_DIR} && python3 scripts/wiki_continuous_ingest.py >> ${HERMES_HOME}/logs/wiki-ingest.log 2>&1"
+CRON_MARKER="# memory-os wiki watcher"
+
+if crontab -l 2>/dev/null | grep -qF "${CRON_MARKER}"; then
+    ok "Wiki watcher cron already installed"
+else
+    (crontab -l 2>/dev/null; echo "${CRON_MARKER}"; echo "${CRON_ENTRY}") | crontab -
+    ok "Wiki watcher cron installed (hourly ingestion)"
+fi
+
+# ──────────────────────────────────────────────────────────────────────────────
 # Phase 8: Environment Variables
 # ──────────────────────────────────────────────────────────────────────────────
 banner "Phase 8: Hermes .env"
