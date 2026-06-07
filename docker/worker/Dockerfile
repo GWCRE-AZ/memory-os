@@ -12,8 +12,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Create non-root user
-RUN useradd -r -u 10001 appuser
+# Create non-root user matching default host UID (1000) for bind mount permissions
+RUN useradd -r -u 1000 appuser
 
 # Copy source code with correct ownership
 COPY --chown=appuser:appuser . .
