@@ -20,3 +20,7 @@ docker/redis_data/
 # OS
 .DS_Store
 Thumbs.db
+
+# Live-data test scripts (output contains sensitive data — never commit)
+scripts/test_collapse_live.py
+AGENTS.md
